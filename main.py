@@ -1,16 +1,6 @@
 import oauth_requests
 
 
-def generate_authorization_link(
-    request_token: str, redirect_uri: str | None = None
-) -> str:
-    base_authorization_url = "https://www.interactivebrokers.com/authorize"
-    authorization_url = base_authorization_url + "?oauth_token=" + request_token
-    if redirect_uri is not None:
-        authorization_url += "&redirect_uri=" + redirect_uri
-    return authorization_url
-
-
 def main():
     # 1. Request the request token
     request_token_response = oauth_requests.request_token()
@@ -22,9 +12,8 @@ def main():
     request_token = request_token_response_data["oauth_token"]
     print("Request token:", request_token)
     # 2. Generate the authorization link and ask the user to authorize
-    authorization_link = generate_authorization_link(
-        request_token=request_token,
-        redirect_uri="http:\\/\\/localhost:8000",
+    authorization_link = oauth_requests.generate_authorization_link(
+        request_token=request_token
     )
     print(
         "Please open the following link in your browser to authrorize:",

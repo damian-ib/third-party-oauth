@@ -19,6 +19,16 @@ app_config = {
 # Helper functions
 
 
+
+def generate_authorization_link(request_token: str) -> str:
+    base_authorization_url = "https://www.interactivebrokers.com/authorize"
+    authorization_url = base_authorization_url + "?oauth_token=" + request_token
+    if redirect_uri is not None:
+        authorization_url += "&redirect_uri=" + app_config["REDIRECT_URI"]
+    return authorization_url
+
+
+
 def send_oauth_request(
     request_method: str,
     request_url: str,
