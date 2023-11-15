@@ -19,7 +19,7 @@ def main():
         "Please open the following link in your browser to authrorize:",
         authorization_link,
     )
-    verifier_token = input("Please enter the verifier token: ")
+    verifier_token = input("Please enter the verifier token from the query params: ")
     # 3. Request the access token and access token secret
     access_token_response = oauth_requests.access_token(
         request_token=request_token,
