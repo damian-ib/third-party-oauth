@@ -19,14 +19,11 @@ app_config = {
 # Helper functions
 
 
-
 def generate_authorization_link(request_token: str) -> str:
     base_authorization_url = "https://www.interactivebrokers.com/authorize"
     authorization_url = base_authorization_url + "?oauth_token=" + request_token
-    if redirect_uri is not None:
-        authorization_url += "&redirect_uri=" + app_config["REDIRECT_URI"]
+    authorization_url += "&redirect_uri=" + app_config["REDIRECT_URI"]
     return authorization_url
-
 
 
 def send_oauth_request(
@@ -56,7 +53,6 @@ def send_oauth_request(
         request_params=request_params,
         prepend=prepend,
     )
-    print(base_string)
     if signature_method == "HMAC-SHA256":
         headers.update(
             {
@@ -220,6 +216,29 @@ def brokerage_accounts(access_token: str, live_session_token: str) -> requests.R
     return send_oauth_request(
         request_method="GET",
         request_url="https://api.ibkr.com/v1/api/iserver/accounts",
+        oauth_token=access_token,
+        live_session_token=live_session_token,
+    )
+
+
+# Portfolio information
+
+
+def account_ledger(
+    access_token: str, live_session_token: str, account_id: str
+) -> requests.Response:
+    return send_oauth_request(
+        request_method="GET",
+        request_url=f"https://api.ibkr.com/v1/api/account/{account_id}/ledger",
+        oauth_token=access_token,
+        live_session_token=live_session_token,
+    )
+
+
+def portfolio_accounts(access_token: str, live_session_token: str) -> requests.Response:
+    return send_oauth_request(
+        request_method="GET",
+        request_url=f"https://api.ibkr.com/v1/api/portfolio/accounts",
         oauth_token=access_token,
         live_session_token=live_session_token,
     )
